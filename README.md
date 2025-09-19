@@ -47,7 +47,7 @@ The placeholder may then be in two fragments for example `{the-` and `placeholde
 The naive approach therefore is not always working. To provide a way to replace placeholders, even if they are fragmented, is the purpose of this library.
 
 ### ➤ Getting Started
-All you need is to `go get github.com/lukasjarosch/go-docx`
+All you need is to `go get github.com/takaxis2/go-docx`
 
 ```go
 func main() {
