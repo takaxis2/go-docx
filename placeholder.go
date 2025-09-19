@@ -9,13 +9,13 @@ import (
 
 var (
 	// OpenDelimiter defines the opening delimiter for the placeholders used inside a docx-document.
-	OpenDelimiter rune = '{'
+	OpenDelimiter string = "{"
 	// CloseDelimiter defines the closing delimiter for the placeholders used inside a docx-document.
-	CloseDelimiter rune = '}'
+	CloseDelimiter string = "}"
 )
 
 // ChangeOpenCloseDelimiter is used for change the open and close delimiters
-func ChangeOpenCloseDelimiter(openDelimiter, closeDelimiter rune) {
+func ChangeOpenCloseDelimiter(openDelimiter, closeDelimiter string) {
 	OpenDelimiter = openDelimiter
 	CloseDelimiter = closeDelimiter
 }
@@ -250,8 +250,8 @@ func ParsePlaceholders(runs DocumentRuns, docBytes []byte) (placeholders []*Plac
 
 		// in order to catch false positives, ensure that all placeholders have BOTH delimiters
 		text := placeholder.Text(docBytes)
-		if !strings.ContainsRune(text, OpenDelimiter) ||
-			!strings.ContainsRune(text, CloseDelimiter) {
+		if !strings.Contains(text, OpenDelimiter) ||
+			!strings.Contains(text, CloseDelimiter) {
 			continue
 		}
 
@@ -284,6 +284,7 @@ func AddPlaceholderDelimiter(s string) string {
 		return s
 	}
 	return fmt.Sprintf("%c%s%c", OpenDelimiter, s, CloseDelimiter)
+	//return OpenDelimiter + s + CloseDelimiter
 }
 
 // RemovePlaceholderDelimiter removes OpenDelimiter and CloseDelimiter from the given text.
@@ -292,20 +293,25 @@ func RemovePlaceholderDelimiter(s string) string {
 	if !IsDelimitedPlaceholder(s) {
 		return s
 	}
-	return strings.Trim(s, fmt.Sprintf("%s%s", string(OpenDelimiter), string(CloseDelimiter)))
+	//return strings.Trim(s, fmt.Sprintf("%s%s", string(OpenDelimiter), string(CloseDelimiter)))
+	s = strings.TrimPrefix(s, OpenDelimiter)
+	s = strings.TrimSuffix(s, CloseDelimiter)
+	return s
 }
 
 // IsDelimitedPlaceholder returns true if the given string is a delimited placeholder.
 // It checks whether the first and last rune in the string is the OpenDelimiter and CloseDelimiter respectively.
 // If the string is empty, false is returned.
 func IsDelimitedPlaceholder(s string) bool {
-	if len(s) < 1 {
+	//if len(s) < 1 {
+	if len(s) < len(OpenDelimiter)+len(CloseDelimiter) {
 		return false
 	}
-	first := s[0]
-	last := s[len(s)-1]
-	if rune(first) == OpenDelimiter && rune(last) == CloseDelimiter {
-		return true
-	}
-	return false
+	// first := s[0]
+	// last := s[len(s)-1]
+	// if string(first) == OpenDelimiter && string(last) == CloseDelimiter {
+	// 	return true
+	// }
+	// return false
+	return strings.HasPrefix(s, OpenDelimiter) && strings.HasSuffix(s, CloseDelimiter)
 }

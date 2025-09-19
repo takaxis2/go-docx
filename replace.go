@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"html"
-	"strings"
 	"sync"
 )
 
@@ -41,10 +40,11 @@ func NewReplacer(docBytes []byte, placeholder []*Placeholder) *Replacer {
 func (r *Replacer) Replace(placeholderKey string, value string) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	if !strings.ContainsRune(placeholderKey, OpenDelimiter) ||
-		!strings.ContainsRune(placeholderKey, CloseDelimiter) {
-		placeholderKey = AddPlaceholderDelimiter(placeholderKey)
-	}
+	// if !strings.Contains(placeholderKey, OpenDelimiter) ||
+	// 	!strings.Contains(placeholderKey, CloseDelimiter) {
+	// 	placeholderKey = AddPlaceholderDelimiter(placeholderKey)
+	// }
+	placeholderKey = AddPlaceholderDelimiter(placeholderKey)
 
 	// find all occurrences of the placeholderKey inside r.placeholders
 	found := false
