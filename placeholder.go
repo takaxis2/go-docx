@@ -18,13 +18,15 @@ var (
 func ChangeOpenCloseDelimiter(openDelimiter, closeDelimiter string) {
 	OpenDelimiter = openDelimiter
 	CloseDelimiter = closeDelimiter
+	OpenDelimiterRegex = regexp.MustCompile(regexp.QuoteMeta(OpenDelimiter))
+	CloseDelimiterRegex = regexp.MustCompile(regexp.QuoteMeta(CloseDelimiter))
 }
 
 var (
 	// OpenDelimiterRegex is used to quickly match the opening delimiter and find it'str positions.
-	OpenDelimiterRegex = regexp.MustCompile(string(OpenDelimiter))
+	OpenDelimiterRegex = regexp.MustCompile(regexp.QuoteMeta(OpenDelimiter))
 	// CloseDelimiterRegex is used to quickly match the closing delimiter and find it'str positions.
-	CloseDelimiterRegex = regexp.MustCompile(string(CloseDelimiter))
+	CloseDelimiterRegex = regexp.MustCompile(regexp.QuoteMeta(CloseDelimiter))
 )
 
 // PlaceholderMap is the type used to map the placeholder keys (without delimiters) to the replacement values
@@ -283,8 +285,7 @@ func AddPlaceholderDelimiter(s string) string {
 	if IsDelimitedPlaceholder(s) {
 		return s
 	}
-	return fmt.Sprintf("%c%s%c", OpenDelimiter, s, CloseDelimiter)
-	//return OpenDelimiter + s + CloseDelimiter
+	return OpenDelimiter + s + CloseDelimiter
 }
 
 // RemovePlaceholderDelimiter removes OpenDelimiter and CloseDelimiter from the given text.
