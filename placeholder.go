@@ -156,7 +156,7 @@ func ParsePlaceholders(runs DocumentRuns, docBytes []byte) (placeholders []*Plac
 
 				// we MUST be having an unclosedPlaceholder or the user made a typo like double-closing ('{foo}}{bar')
 				if !hasOpenPlaceholder {
-					return nil, fmt.Errorf("unexpected %c in run %d \"%s\"), missing preceeding %c", CloseDelimiter, run.ID, run.GetText(docBytes), OpenDelimiter)
+					return nil, fmt.Errorf("unexpected %s in run %d \"%s\"), missing preceeding %s", CloseDelimiter, run.ID, run.GetText(docBytes), OpenDelimiter)
 				}
 
 				// everything up to firstClosePos belongs to the currently open placeholder
