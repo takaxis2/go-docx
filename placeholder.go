@@ -160,7 +160,7 @@ func ParsePlaceholders(runs DocumentRuns, docBytes []byte) (placeholders []*Plac
 				}
 
 				// everything up to firstClosePos belongs to the currently open placeholder
-				fragment := NewPlaceholderFragment(0, Position{0, int64(firstClosePos) + 1}, run)
+				fragment := NewPlaceholderFragment(0, Position{0, int64(firstClosePos) + int64(len(CloseDelimiter))}, run)
 				unclosedPlaceholder.Fragments = append(unclosedPlaceholder.Fragments, fragment)
 				placeholders = append(placeholders, unclosedPlaceholder)
 
@@ -215,7 +215,7 @@ func ParsePlaceholders(runs DocumentRuns, docBytes []byte) (placeholders []*Plac
 
 			// there is only a closePos and no open pos
 			if len(closePos) == 1 {
-				fragment := NewPlaceholderFragment(0, Position{0, int64(int64(closePos[0]) + 1)}, run)
+				fragment := NewPlaceholderFragment(0, Position{0, int64(closePos[0]) + int64(len(CloseDelimiter))}, run)
 				unclosedPlaceholder.Fragments = append(unclosedPlaceholder.Fragments, fragment)
 				placeholders = append(placeholders, unclosedPlaceholder)
 				unclosedPlaceholder = new(Placeholder)
@@ -271,7 +271,7 @@ func ParsePlaceholders(runs DocumentRuns, docBytes []byte) (placeholders []*Plac
 func assembleFullPlaceholders(run *Run, openPos, closePos []int) (placeholders []*Placeholder) {
 	for i := 0; i < len(openPos); i++ {
 		start := openPos[i]
-		end := closePos[i] + 1 // +1 is required to include the closing delimiter in the text
+		end := closePos[i] + len(CloseDelimiter) // include the closing delimiter in the text
 		fragment := NewPlaceholderFragment(0, Position{int64(start), int64(end)}, run)
 		p := &Placeholder{Fragments: []*PlaceholderFragment{fragment}}
 		placeholders = append(placeholders, p)
