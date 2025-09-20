@@ -6,7 +6,60 @@ import (
 	"testing"
 )
 
+func Test_Replacements(t *testing.T) {
+
+	ChangeOpenCloseDelimiter("{{", "}}")
+
+	replacements := map[string]string{
+		"WORK_YEAR":  "5555",
+		"WORK_MONTH": "44",
+		"WORK_DATE":  "33"}
+
+	doc, err := Open("./test/test_template.docx")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	plchlderMap := PlaceholderMap{}
+	for repl := range replacements {
+		plchlderMap.Add(repl, replacements[repl])
+	}
+
+	err = doc.ReplaceAll(plchlderMap)
+	if err != nil {
+		t.Error("replacing failed", err)
+		return
+	}
+
+	// err = doc.Replace("WORK_YEAR", "555")
+	// if err != nil {
+	// 	t.Error(err)
+	// 	return
+	// }
+
+	// err = doc.Replace("WORK_MONTH", "44")
+	// if err != nil {
+	// 	t.Error(err)
+	// 	return
+	// }
+
+	// for repl := range replacements {
+	// 	err = doc.Replace(repl, replacements[repl])
+	// 	if err != nil {
+	// 		t.Error(err)
+	// 	}
+	// }
+
+	err = doc.WriteToFile("./test/out_template.docx")
+	if err != nil {
+		t.Error("unable to write", err)
+		return
+	}
+}
+
 func TestDocument_ReplaceAll(t *testing.T) {
+
 	ChangeOpenCloseDelimiter("{{", "}}")
 
 	replaceMap := PlaceholderMap{

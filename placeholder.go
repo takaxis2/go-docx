@@ -32,6 +32,11 @@ var (
 // PlaceholderMap is the type used to map the placeholder keys (without delimiters) to the replacement values
 type PlaceholderMap map[string]interface{}
 
+// Add adds a key-value pair to the map.
+func (p PlaceholderMap) Add(key string, value interface{}) {
+	p[key] = value
+}
+
 // Placeholder is the internal representation of a parsed placeholder from the docx-archive.
 // A placeholder usually consists of multiple PlaceholderFragments which specify the relative
 // byte-offsets of the fragment inside the underlying byte-data.
